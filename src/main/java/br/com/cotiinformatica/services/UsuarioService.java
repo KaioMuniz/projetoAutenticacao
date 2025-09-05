@@ -10,6 +10,7 @@ import br.com.cotiinformatica.dtos.AutenticarUsuarioResponseDto;
 import br.com.cotiinformatica.dtos.CriarUsuarioRequestDto;
 import br.com.cotiinformatica.dtos.CriarUsuarioResponseDto;
 import br.com.cotiinformatica.entities.Usuario;
+import br.com.cotiinformatica.helpers.CryptoHelper;
 import br.com.cotiinformatica.repositories.UsuarioRepository;
 
 @Service
@@ -26,10 +27,12 @@ public class UsuarioService {
 		//criando um objeto da classe Usuario
 		var usuario = new Usuario();
 		
+		var crypto = new CryptoHelper();
+		
 		//Preenchendo os dados do usuário
 		usuario.setNome(request.getNome());
 		usuario.setEmail(request.getEmail());
-		usuario.setSenha(request.getSenha());
+		usuario.setSenha(crypto.getSha256(request.getSenha()));
 		usuario.setDataHoraCriacao(LocalDateTime.now());
 		
 		//gravar o usuário no banco de dados
