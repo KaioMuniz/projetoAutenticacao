@@ -23,10 +23,17 @@ public class UsuarioService {
 	 * Serviço para criação de usuário
 	 */
 	public CriarUsuarioResponseDto criarUsuario(CriarUsuarioRequestDto request) {		
-
+		
+		//Verificação de segurança para não permitir email duplicado
+		//perguntando se já existe um usuário no banco de dados com o email informado
+		if(usuarioRepository.find(request.getEmail()) != null)
+			//Lançar uma exceção informando que o email já está cadastrado
+			throw new RuntimeException("O email informado já está cadastrado."); 
+				
 		//criando um objeto da classe Usuario
 		var usuario = new Usuario();
 		
+		//Criando um objeto da classe de criptografia
 		var crypto = new CryptoHelper();
 		
 		//Preenchendo os dados do usuário
